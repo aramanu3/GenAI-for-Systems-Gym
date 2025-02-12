@@ -77,28 +77,42 @@ class EvictionPolicyModel(nn.Module):
       cache_line_dim += cache_pc_embedder.embed_dim
       
     # MLP layers
-    self._mlp = nn.Sequential(
-      nn.Linear(input_dim, mlp_hidden_size),
-      nn.ReLU(),
-      nn.Linear(mlp_hidden_size, mlp_hidden_size),
-      nn.ReLU()
-    )
+    # self._mlp = nn.Sequential(
+    #   nn.Linear(input_dim, mlp_hidden_size),
+    #   nn.ReLU(),
+    #   nn.Linear(mlp_hidden_size, mlp_hidden_size),
+    #   nn.ReLU()
+    # )
 
-    self._positional_embedder = positional_embedder
+    # self._positional_embedder = positional_embedder
 
         
+    # self._cache_line_scorer = nn.Sequential(
+    #   nn.Linear(mlp_hidden_size + cache_line_dim, mlp_hidden_size),
+    #   nn.ReLU(),
+    #   nn.Linear(mlp_hidden_size, 1),
+    #   nn.ReLU(),
+    # )
+
+    # self._reuse_distance_estimator = nn.Sequential(
+    #   nn.Linear(mlp_hidden_size + cache_line_dim, mlp_hidden_size),
+    #   nn.ReLU(),
+    #   nn.Linear(mlp_hidden_size, 1),
+    #   nn.ReLU(),
+    # )
+    self._mlp = nn.Sequential(
+        nn.Linear(input_dim, mlp_hidden_size),
+        nn.ReLU(),  
+    )
+
     self._cache_line_scorer = nn.Sequential(
-      nn.Linear(mlp_hidden_size + cache_line_dim, mlp_hidden_size),
-      nn.ReLU(),
-      nn.Linear(mlp_hidden_size, 1),
-      nn.ReLU(),
+        nn.Linear(mlp_hidden_size + cache_line_dim, 1),  
+        nn.ReLU(),  
     )
 
     self._reuse_distance_estimator = nn.Sequential(
-      nn.Linear(mlp_hidden_size + cache_line_dim, mlp_hidden_size),
-      nn.ReLU(),
-      nn.Linear(mlp_hidden_size, 1),
-      nn.ReLU(),
+        nn.Linear(mlp_hidden_size + cache_line_dim, 1), 
+        nn.ReLU(), 
     )
 
     if loss_fns is None:
